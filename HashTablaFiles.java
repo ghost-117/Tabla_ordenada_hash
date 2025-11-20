@@ -1,8 +1,9 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.Hashtable;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.TreeMap;
 
 public class HashTablaFiles{
 
@@ -51,26 +52,23 @@ public class HashTablaFiles{
         return array;
     }
 
-    // Ordenamiento con Hash Table optimizado usando búsqueda binaria
-    public String[] sortStringsByHashTableOptimized(String[] array){
-        Hashtable<String, Integer> hashTable = new Hashtable<>();
+    public String[] sortStringsByTreeMap(String[] array){
+        TreeMap<String, Integer> treeMap = new TreeMap<>();
         
+
         for(String elemento : array){
-            if(!hashTable.containsKey(elemento)){
-                hashTable.put(elemento, 1);
+            if(treeMap.containsKey(elemento)){
+                treeMap.put(elemento, treeMap.get(elemento) + 1);
             } else {
-                hashTable.put(elemento, hashTable.get(elemento) + 1);
+                treeMap.put(elemento, 1);
             }
         }
-        String[] claves = hashTable.keySet().toArray(new String[0]);
-        Arrays.sort(claves);
-        
-        // Reconstruir el array con los elementos ordenados (incluyendo duplicados)
+
         String[] resultado = new String[array.length];
         int indice = 0;
         
-        for(String clave : claves){
-            int cantidad = hashTable.get(clave);
+        for(String clave : treeMap.keySet()){
+            int cantidad = treeMap.get(clave);
             for(int i = 0; i < cantidad; i++){
                 resultado[indice] = clave;
                 indice++;
@@ -80,4 +78,17 @@ public class HashTablaFiles{
         return resultado;
     }
 
+    public void escribirarrayFile(String fileName, String[] array){
+        FileWriter file;
+        PrintWriter writer;
+        try{
+            file = new FileWriter("c:\\Archivos\\" + fileName);
+            writer = new PrintWriter(file);
+            for(String unDato : array)
+                writer.println(unDato);
+            file.close();
+        } catch ( Exception e) {
+            System.out.println("Error al crear el archivo: " + e.toString());
+        }
+    }
 }
